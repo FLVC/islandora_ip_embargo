@@ -17,7 +17,7 @@ function islandora_ip_embargo_get_lists() {
   $query = $query->fields('islandora_ip_embargo_lists');
   $query = $query->extend('TableSort');
   $query = $query->extend('PagerDefault');
-  $query = $query->limit(10);
+  $query = $query->limit(20);
 
   return $query->execute();
 }
@@ -99,7 +99,7 @@ function islandora_ip_embargo_get_lists_information($list_identifier) {
   $query = $query->condition('lists.lid', $list_identifier);
   $query = $query->extend('TableSort');
   $query = $query->extend('PagerDefault');
-  $query = $query->limit(10);
+  $query = $query->limit(20);
 
   return $query->execute();
 }
