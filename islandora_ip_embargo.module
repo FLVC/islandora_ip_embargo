@@ -192,9 +192,10 @@ function islandora_ip_embargo_preprocess_image(&$variables) {
       $image_path_parts[$size_of_image_path - 3] == 'datastream') {
 
     $pid = urldecode($image_path_parts[$size_of_image_path - 4]);
-    $embargo_result = islandora_ip_embargo_get_embargo($pid);
+    //$embargo_result = islandora_ip_embargo_get_embargo($pid);
 
-    if ($embargo_result->rowCount()) {
+    //if ($embargo_result->rowCount()) {
+    if (islandora_ip_embargo_restrict_access($pid)) {
       drupal_add_js(drupal_get_path('module', 'islandora_ip_embargo')
         . '/js/embargoed_images.js');
       if (isset($variables['#attributes']['class'])) {
