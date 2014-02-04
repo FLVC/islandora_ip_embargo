@@ -19,7 +19,7 @@ function islandora_ip_embargo_settings_form($form, &$form_state) {
   $form['islandora_ip_embargo_embargoed_redirect'] = array(
     '#type' => 'textfield',
     '#title' => t('Object embargoed redirect'),
-    '#description' => t('The URL to go to when an object is embaroged.'),
+    '#description' => t('The URL to go to when an object is embargoed.'),
     '#default_value' => variable_get(
       'islandora_ip_embargo_embargoed_redirect',
       ''
@@ -28,7 +28,7 @@ function islandora_ip_embargo_settings_form($form, &$form_state) {
   $form['islandora_ip_embargo_days_before_embargo_trigger'] = array(
     '#type' => 'textfield',
     '#title' => t('Days before embargo alert'),
-    '#description' => t('How many days before an embargo is lifted to trigger rules.'),
+    '#description' => t('Rules will be triggered this number of days before an embargo is lifted.'),
     '#default_value' => variable_get(
       'islandora_ip_embargo_days_before_embargo_trigger',
       0
@@ -61,7 +61,7 @@ function islandora_ip_embargo_manage_embargo_list_form($form, &$form_state) {
   while ($data = $embargoes->fetchObject()) {
     $fedora_object = islandora_object_load($data->pid);
 
-    if (! is_object($fedora_object)) {
+    if (!is_object($fedora_object)) {
       continue;
     }
 
@@ -137,7 +137,7 @@ function islandora_ip_embargo_manage_lists_form($form, &$form_state) {
     '#header' => $header,
     '#options' => $options,
     '#attributes' => array(),
-    '#empty' => t("There are no lists."),
+    '#empty' => t("There are no network lists."),
   );
   $form['pager'] = array(
     '#markup' => theme('pager'),
@@ -148,7 +148,7 @@ function islandora_ip_embargo_manage_lists_form($form, &$form_state) {
     '#value' => t('Delete'),
   );
   $form['Add'] = array(
-    '#markup' => l(t('Add list'), 'admin/islandora/ip_embargo/lists/add'),
+    '#markup' => l(t('Add network list'), 'admin/islandora/ip_embargo/lists/add'),
   );
 
   return $form;
@@ -168,11 +168,11 @@ function islandora_ip_embargo_manage_lists_form_validate($form, &$form_state) {
     if ($is_checked) {
       $embargoes_results = islandora_ip_embargo_get_embargos($list_identifier);
       if ($embargoes_results->rowCount()) {
-        form_set_error('list', t("You can't delete a list with embargoes."));
+        form_set_error('list', t("You can't delete a network list with embargoes."));
       }
       $ranges_results = islandora_ip_embargo_get_lists_information($list_identifier);
       if ($ranges_results->rowCount()) {
-        form_set_error('list', t("You can't delete a list with ranges."));
+        form_set_error('list', t("You can't delete a network list with ranges."));
       }
     }
   }
@@ -210,8 +210,8 @@ function islandora_ip_embargo_manage_lists_form_submit($form, &$form_state) {
  */
 function islandora_ip_embargo_add_list_form($form, &$form_state) {
   $form['name'] = array(
-    '#title' => t('Name'),
-    '#description' => t('Name of the list.'),
+    '#title' => t('Network List Name'),
+    '#description' => t('Label for the list of IP addresses.'),
     '#type' => 'textfield',
     '#required' => TRUE,
   );
@@ -263,8 +263,8 @@ function islandora_ip_embargo_edit_list_form($form, &$form_state, $list_identifi
   }
 
   $form['name'] = array(
-    '#title' => t('Name'),
-    '#description' => t('Name of the list.'),
+    '#title' => t('Network List Name'),
+    '#description' => t('Label for the list of IP addresses.'),
     '#type' => 'textfield',
     '#required' => TRUE,
     '#default_value' => $list_name,
@@ -290,7 +290,7 @@ function islandora_ip_embargo_edit_list_form($form, &$form_state, $list_identifi
     '#submit' => array('islandora_ip_embargo_edit_list_form_range_submit'),
   );
   $form['Add'] = array(
-    '#markup' => l(t('Add range'), "admin/islandora/ip_embargo/ranges/add/$list_identifier"),
+    '#markup' => l(t('Add IP address range'), "admin/islandora/ip_embargo/ranges/add/$list_identifier"),
   );
   return $form;
 }
@@ -342,19 +342,19 @@ function islandora_ip_embargo_edit_list_form_range_submit($form, &$form_state) {
  */
 function islandora_ip_embargo_add_range_form($form, &$form_state, $list_identifier) {
   $form['low_end'] = array(
-    '#title' => t('Lowend'),
-    '#description' => t('low end of the IP range.'),
+    '#title' => t('Low end'),
+    '#description' => t('First address in the IP range (e.g, "172.16.0.0").'),
     '#type' => 'textfield',
     '#required' => TRUE,
   );
   $form['high_end'] = array(
-    '#title' => t('Highend'),
-    '#description' => t('High end of the IP range.'),
+    '#title' => t('High end'),
+    '#description' => t('Last address in the IP range (e.g., "172.16.255.255").'),
     '#type' => 'textfield',
     '#required' => TRUE,
   );
   $form_state['storage']['islandora_ip_embargo']['list_identifier'] = $list_identifier;
-  $form['submit'] = array('#type' => 'submit', '#value' => t('Create range'));
+  $form['submit'] = array('#type' => 'submit', '#value' => t('Add IP address range'));
   return $form;
 }
 
@@ -403,7 +403,7 @@ function islandora_ip_embargo_object_embargo_form($form, &$form_state, $islandor
   $form['lists'] = array(
     '#type' => 'select',
     '#title' => 'IP address range list',
-    '#description' => t('The list of IP ranges to limit access to this object to.'),
+    '#description' => t('The list of IP ranges for which this object will be available.  Any other network address will be blocked.'),
     '#options' => $options,
   );
   $form['expiry_date'] = array(
