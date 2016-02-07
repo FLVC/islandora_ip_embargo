@@ -25,6 +25,13 @@ function islandora_ip_embargo_settings_form($form, &$form_state) {
       ''
     ),
   );
+  $form['islandora_ip_embargo_embargoed_redirect_append_url'] = array(
+    '#type' => 'checkbox',
+    '#title' => t("Append embargoed object's URL."),
+    '#default_value' => variable_get('islandora_ip_embargo_embargoed_redirect_append_url', 0),
+    '#description' => t("Check this option if you want to append the embargoed object's URL
+      before redirecting (for example, for use with Ezproxy)."),
+  );
   $form['islandora_ip_embargo_days_before_embargo_trigger'] = array(
     '#type' => 'textfield',
     '#title' => t('Days before embargo alert'),
@@ -356,6 +363,31 @@ function islandora_ip_embargo_add_range_form($form, &$form_state, $list_identifi
   $form_state['storage']['islandora_ip_embargo']['list_identifier'] = $list_identifier;
   $form['submit'] = array('#type' => 'submit', '#value' => t('Add IP address range'));
   return $form;
+}
+
+/**
+ * Validate handler for adding an IP Range.
+ *
+ * @param array $form
+ *   The Drupal form definition.
+ * @param array $form_state
+ *   The Drupal form state.
+ */
+function islandora_ip_embargo_add_range_form_validate(array $form, array &$form_state) {
+  $comparable_low = ip2long($form_state['values']['low_end']);
+  $comparable_high = ip2long($form_state['values']['high_end']);
+
+  if ($comparable_low === FALSE) {
+    form_set_error('low_end', t('Low end IP is not valid.'));
+  }
+
+  if ($comparable_high === FALSE) {
+    form_set_error('high_end', t('High end IP is not valid.'));
+  }
+
+  if ($comparable_low !== FALSE && $comparable_high !== FALSE &&  $comparable_low > $comparable_high) {
+    form_set_error('', t('IP range is not valid. The low address is greater than the high.'));
+  }
 }
 
 /**
