@@ -16,6 +16,10 @@ Drupal.behaviors.islandora_ip_embargo = {
         'font-size' : '1.25em',
         'position' : 'absolute',
         'text-decoration' : 'none',
+        'text-align': 'center',
+        'text-shadow': '0px 0px .4em black',
+        'background-color': 'rgba(0, 0, 0, 0.6)',
+        'box-shadow': '0px 0px 3px 2px rgba(0, 0, 0, .75)',
       });
     });
   }};
