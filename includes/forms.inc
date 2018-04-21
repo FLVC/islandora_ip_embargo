@@ -100,10 +100,10 @@ function islandora_ip_embargo_manage_embargo_list_form($form, &$form_state) {
       continue;
     }
 
-    $rels = $fedora_object->relationships->get();
+    $rels = $fedora_object->relationships->get(FEDORA_RELS_EXT_URI, 'isMemberOfCollection');
     $options[$data->pid]['modify'] = l($fedora_object->label, 'islandora/object/' . $data->pid . '/ip_embargo');
     $options[$data->pid]['pid'] = l($data->pid, 'islandora/object/' . $data->pid . '/manage');
-    $options[$data->pid]['collection'] = l($rels[1]['object']['value'], 'islandora/object/' . $rels[0]['object']['value']);
+    $options[$data->pid]['collection'] = l($rels[0]['object']['value'], 'islandora/object/' . $rels[0]['object']['value']);
   }
 
   $header = array(
