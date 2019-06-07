@@ -247,6 +247,11 @@ function islandora_ip_embargo_ip_in_range($low, $high) {
   if ($comparable_address >= $comparable_low && $comparable_address <= $comparable_high) {
     return TRUE;
   }
+  // allow internal requests from server
+  $server_address = ip2long($_SERVER['SERVER_ADDR']);
+  if ($comparable_address == $server_address) {
+    return TRUE;
+  }
   return FALSE;
 }
 
