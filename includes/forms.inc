@@ -70,6 +70,12 @@ function islandora_ip_embargo_settings_form(array $form, array &$form_state) {
       'FF0000'
     ),
   );
+  $form['islandora_ip_embargo_force_overlay_for_manage_embargo'] = array(
+    '#type' => 'checkbox',
+    '#title' => t("Always display the thumbnail overlay to embargo managers."),
+    '#default_value' => variable_get('islandora_ip_embargo_force_overlay_for_manage_embargo', 0),
+    '#description' => t("Check this option to always display the thumbnail overlay on objects with IP restrictions if the user can manage embargoes."),
+  );
 
   return system_settings_form($form);
 }

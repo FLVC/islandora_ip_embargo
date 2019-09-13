@@ -188,13 +188,17 @@ function islandora_ip_embargo_preprocess_image(&$variables) {
       $image_path_parts[$size_of_image_path - 3] == 'datastream') {
 
     $pid = urldecode($image_path_parts[$size_of_image_path - 4]);
-    //$embargo_result = islandora_ip_embargo_get_embargo($pid);
+    $embargo_result = islandora_ip_embargo_get_embargo($pid);
 
     $text = variable_get('islandora_ip_embargo_overlay_text', 'EMBARGOED');
     $color = variable_get('islandora_ip_embargo_overlay_text_color', 'FF0000');
 
+    $force_display = variable_get('islandora_ip_embargo_force_overlay_for_manage_embargo', 0)
+                     &&($embargo_result->rowCount())
+                     &&(user_access(ISLANDORA_IP_EMBARGO_MANAGE_EMBARGOES));
+
     //if ($embargo_result->rowCount()) {
-    if (islandora_ip_embargo_restrict_access($pid)) {
+    if (islandora_ip_embargo_restrict_access($pid) || ($force_display)) {
       drupal_add_js(drupal_get_path('module', 'islandora_ip_embargo') . '/js/embargoed_images.js');
       drupal_add_js(array('islandora_ip_embargo' => array('text' => $text, 'color' => $color)), array('type' => 'setting'));
       if (isset($variables['#attributes']['class'])) {
